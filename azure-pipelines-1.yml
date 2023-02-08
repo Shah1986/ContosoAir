@@ -33,3 +33,29 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
+
+stages:
+- stage: BuildStage
+  jobs:
+  - job: BuildJob
+    steps:
+    - bash: echo  "##vso[task.setvariable variable=TestArtifactName;isoutput=true]testValue"
+      name: printvar
+- stage: DeployWebsiteStage
+  lockBehavior: sequential
+  dependsOn: BuildStage    
+  condition: succeeded()
+  variables:
+    BuildStageArtifactFolderName: $[stageDependencies.BuildStage.BuildJob.outputs['printvar.TestArtifactName'] ]
+  jobs:
+    - deployment: DeployWebsite
+      environment:
+        name: webapplicationdeploy
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: PowerShell@2
+              inputs:
+                targetType: 'inline'
+                script: Write-Host "BuildStageArtifactFolderName:" $(BuildStageArtifactFolderName)
