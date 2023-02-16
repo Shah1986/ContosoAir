@@ -33,26 +33,3 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
-
-- task: AzureResourceManagerTemplateDeployment@3
-  displayName: 'ARM Template deployment:'
-  inputs:
-    azureResourceManagerConnection: 'Mindtree_Chat (e9735a76-e0fb-4c01-b485-f95afa5949d0)'
-    subscriptionId: 'e9735a76-e0fb-4c01-b485-f95afa5949d0'
-    resourceGroupName: shahrg
-    location: 'East US'
-    csmFile: '$(System.DefaultWorkingDirectory)/_Shah1986.ContosoAir (1)/drop/Templates/azuredeploy.json'
-    csmParametersFile: '$(System.DefaultWorkingDirectory)/_Shah1986.ContosoAir (1)/drop/Templates/azuredeploy.parameters.json'
-
-- task: ARM Outputs@6
-  inputs:
-    ConnectedServiceNameSelector: 'ConnectedServiceNameARM'
-    ConnectedServiceNameARM: 'Mindtree_Chat (e9735a76-e0fb-4c01-b485-f95afa5949d0)'
-    resourceGroupName: 'shahrg'
-    whenLastDeploymentIsFailed: 'fail'
-
-- task: AzureRmWebAppDeployment@4
-  displayName: 'Azure App Service Deploy: githubci2-web-dev'
-  inputs:
-    azureSubscription: 'Mindtree_Chat (e9735a76-e0fb-4c01-b485-f95afa5949d0)'
-    WebAppName: 'githubci2-web-dev'
